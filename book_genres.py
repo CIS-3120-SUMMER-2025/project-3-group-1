@@ -32,12 +32,10 @@ for genre in genres:
         for book in data['docs']:
             title = book['title']
             author = book['author_name']
-            year = book['first_publish_year']
             language = book['language']
 
             print(f"Title: {title}")
             print(f"Author(s): {author}")
-            print(f"First Published: {year}")
             print(f"Languages: {language}")
             # blank line between books
             print()   
@@ -47,7 +45,6 @@ for genre in genres:
                 "Genre": genre,
                 "Title": title,
                 "Author(s)": author,
-                "First Published": year,
                 "Languages": language
             })
 
