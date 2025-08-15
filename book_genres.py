@@ -55,3 +55,41 @@ for genre in genres:
 
 df = pd.DataFrame(all_books)
 df.to_csv("Books_By_Genre.csv", index=False)
+
+# Generative AI with Ollama
+API_URL = "http://127.0.0.1:11434/api/generate"  # Ollama local API
+
+def generate_text(prompt, model="tinyllama", stream=False):
+    """
+    Generate text using Ollama API
+    """
+    payload = {
+        "model": model,
+        "prompt": prompt,
+        "stream": stream
+    }
+    try:
+        response = requests.post(API_URL, json=payload)
+        if response.status_code == 200:
+            result = response.json()
+            return result.get("response", "")
+        else:
+            return f"Error: {response.status_code} - {response.text}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+# Generate AI discussions for each book
+ai_discussions = []
+
+for book in all_books:
+    title = book["Title"]
+    prompt = f"Generate 3-5 discussion questions for a virtual book club reading '{title}'."
+
+    discussion = generate_text(prompt)
+    print(f" AI Discussion for '{title}':\n{discussion}\n")
+
+    ai_discussions.append({
+        "Title": title,
+        "AI_Discussion": discussion
+    })
+
