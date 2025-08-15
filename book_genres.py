@@ -122,24 +122,18 @@ def team_chat(message, history):
 
     prompt = header + "\n".join(convo)
     return generate_text(prompt) 
-with gr.Tab("Book Club Chat (Team API)"):
+with gr.Blocks() as demo:
     gr.ChatInterface(
         fn=team_chat,
         title="Book Club Chat (Team API)",
-        description=(
-            "Chat is powered by our team's local endpoint at /api/generate. "
-            "Ask about books or request 3–5 discussion questions for a title."
-        ),
+        description="Chat is powered by our team's AI. Ask about books or request 3–5 discussion questions for a title.",
         examples=[
             "Give 3–5 discussion questions for 'The Hobbit'.",
             "Summarize why people enjoy mystery novels.",
-            "Recommend a fantasy book for beginners and why.",
-            "Compare romance vs. mystery themes in 3 bullet points.",
-            "Explain how to choose book club picks by genre."
-        ],
-        theme="soft"
+            "Recommend a fantasy book for beginners and why."
+        ]
     )
 
-##share for public
+# Launch the app with a public link
 if __name__ == "__main__":
     demo.launch(share=True)
