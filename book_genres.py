@@ -92,4 +92,54 @@ for book in all_books:
         "Title": title,
         "AI_Discussion": discussion
     })
+#Gradio App
+import requests
+API_URL = "http://127.0.0.1:11434/api/generate"  # Ollama local API
 
+def generate_text(prompt, model="tinyllama", stream=False):
+    payload = {"model": model, "prompt": prompt, "stream": stream}
+    try:
+        resp = requests.post(API_URL, json=payload, timeout=60)
+        if resp.status_code == 200:
+            data = resp.json()
+            return data.get("response", "")
+        return f"Error {resp.status_code}: {resp.text}"
+    except Exception as e:
+        return f"Error: {e}"
+def team_chat(message, history):
+  
+    header = (
+        "You are a concise Book Club assistant. "
+        "Use short, helpful replies. If asked, you can craft 3–5 discussion questions for a book.\n\n"
+        "Conversation so far:\n"
+    )
+    convo = []
+    for u, a in history:
+        if u: convo.append(f"User: {u}")
+        if a: convo.append(f"Assistant: {a}")
+    convo.append(f"User: {message}")
+    convo.append("Assistant:")
+
+    prompt = header + "\n".join(convo)
+    return generate_text(prompt) 
+with gr.Tab("Book Club Chat (Team API)"):
+    gr.ChatInterface(
+        fn=team_chat,
+        title="Book Club Chat (Team API)",
+        description=(
+            "Chat is powered by our team's local endpoint at /api/generate. "
+            "Ask about books or request 3–5 discussion questions for a title."
+        ),
+        examples=[
+            "Give 3–5 discussion questions for 'The Hobbit'.",
+            "Summarize why people enjoy mystery novels.",
+            "Recommend a fantasy book for beginners and why.",
+            "Compare romance vs. mystery themes in 3 bullet points.",
+            "Explain how to choose book club picks by genre."
+        ],
+        theme="soft"
+    )
+
+##share for public
+if __name__ == "__main__":
+    demo.launch(share=True)
