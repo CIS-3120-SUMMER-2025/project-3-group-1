@@ -23,7 +23,7 @@ git clone https://github.com/CIS-3120-SUMMER-2025/project-3-group-1.git
 pip install -r requirements.txt
 
 Step 3:
-Run the App Locally
+-Run the App Locally
 python book_genres.py
 
 
